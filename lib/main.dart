@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:zoom_clone/resources/auth_methods.dart';
 import 'package:zoom_clone/screens/home_screen.dart';
 import 'package:zoom_clone/screens/login_screen.dart';
 import 'package:zoom_clone/utils/colors.dart';
@@ -20,9 +21,21 @@ class MyApp extends StatelessWidget {
       theme:
           ThemeData.dark().copyWith(scaffoldBackgroundColor: backgroundColor),
       routes: {
-        '/' :(context) => LoginScreen(),
-        'home':(context) => HomeScreen(),
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(),
       },
+      home: StreamBuilder(
+        stream: AuthMethods().authChanges,
+        builder: (context, snapShot) {
+          if (snapShot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapShot.hasData) {
+            return HomeScreen();
+          }
+          return LoginScreen();
+        },
+      ),
     );
   }
 }

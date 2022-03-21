@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zoom_clone/resources/atuh_methods.dart';
+import 'package:zoom_clone/resources/auth_methods.dart';
 import 'package:zoom_clone/widgets/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () async {
                 bool res = await _authMethods.signUpWithGoogle(context);
                 if (res == true) {
-                  Navigator.pushNamed(context, 'home');
+                  Navigator.pushNamed(context, '/home');
                 }
               },
             )
