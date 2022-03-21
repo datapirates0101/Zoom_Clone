@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:zoom_clone/screens/history_meeting_screen.dart';
+import 'package:zoom_clone/screens/meet_screen.dart';
 import 'package:zoom_clone/utils/colors.dart';
-import 'package:zoom_clone/widgets/home_meeting_button.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,6 +21,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  List<Widget> pages = [
+    MeetScreen(),
+    HistoryMeetingScreen(),
+    Text('Contacts'),
+    Text('Settings')
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,53 +37,14 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: backgroundColor,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              HomeMeetingButton(
-                onPressed: () {},
-                icon: Icons.videocam,
-                text: 'New Meeting',
-              ),
-              HomeMeetingButton(
-                onPressed: () {},
-                icon: Icons.add_box_rounded,
-                text: 'Join Meeting',
-              ),
-              HomeMeetingButton(
-                onPressed: () {},
-                icon: Icons.calendar_today,
-                text: 'Sehedule',
-              ),
-              HomeMeetingButton(
-                onPressed: () {},
-                icon: Icons.arrow_upward_rounded,
-                text: 'Share Screen',
-              ),
-            ],
-          ),
-          const Expanded(
-            child: Center(
-              child: Text(
-                'Create/Join Meeting with just a click',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+      body: pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: footerColor,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.grey,
         type: BottomNavigationBarType.fixed,
         unselectedFontSize: 14,
-        items: [
+        items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.comment_bank), label: 'meet and chat'),
           BottomNavigationBarItem(
@@ -82,8 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icon(Icons.person_outline), label: 'Contacts'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings_outlined), label: 'Settings'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.meeting_room_outlined), label: 'lol'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
