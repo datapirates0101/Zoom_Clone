@@ -3,10 +3,12 @@ import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:zoom_clone/resources/auth_methods.dart';
 
 class JitsiMeetMethods {
-  void createMeeting(
-      {required String roomName,
-      required bool isAudioMuted,
-      required bool isVideoMuted}) async {
+  void createMeeting({
+    required String roomName,
+    required bool isAudioMuted,
+    required bool isVideoMuted,
+    String username = '',
+  }) async {
     final AuthMethods authMethods = AuthMethods();
     try {
       FeatureFlag featureFlag = FeatureFlag();
@@ -14,10 +16,18 @@ class JitsiMeetMethods {
       featureFlag.resolution = FeatureFlagVideoResolution
           .MD_RESOLUTION; // Limit video resolution to 360p
 
+      String name;
+
+      if (username.isEmpty) {
+        name = authMethods.getUser.displayName!;
+      }else{
+        name = username;
+      }
+
       var options = JitsiMeetingOptions(
         room: roomName,
       )
-        ..userDisplayName = authMethods.getUser.displayName
+        ..userDisplayName = name
         ..userEmail = authMethods.getUser.email
         ..userAvatarURL = authMethods.getUser.photoURL // or .png
         ..audioMuted = isAudioMuted
