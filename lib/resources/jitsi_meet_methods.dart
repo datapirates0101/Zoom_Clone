@@ -1,6 +1,7 @@
 import 'package:jitsi_meet/feature_flag/feature_flag.dart';
 import 'package:jitsi_meet/jitsi_meet.dart';
 import 'package:zoom_clone/resources/auth_methods.dart';
+import 'package:zoom_clone/resources/firestore_methods.dart';
 
 class JitsiMeetMethods {
   void createMeeting({
@@ -10,6 +11,7 @@ class JitsiMeetMethods {
     String username = '',
   }) async {
     final AuthMethods authMethods = AuthMethods();
+    final FireStoreMethods _fireStoreMethods = FireStoreMethods();
     try {
       FeatureFlag featureFlag = FeatureFlag();
       featureFlag.welcomePageEnabled = false;
@@ -20,7 +22,7 @@ class JitsiMeetMethods {
 
       if (username.isEmpty) {
         name = authMethods.getUser.displayName!;
-      }else{
+      } else {
         name = username;
       }
 
@@ -33,6 +35,7 @@ class JitsiMeetMethods {
         ..audioMuted = isAudioMuted
         ..videoMuted = isVideoMuted;
 
+      _fireStoreMethods.addToMeetingHistory(roomName);
       await JitsiMeet.joinMeeting(options);
     } catch (e) {
       print(e.toString());
